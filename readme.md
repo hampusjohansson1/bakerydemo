@@ -80,6 +80,11 @@ Ledning för de vanligaste docker-kommandona finns här: [Docker cheat sheet](ht
     - På valfritt sätt mounta containerns /code/db.sqllite (-v)
     - Hjälp dina kollegor
 
+16. Har du ännu mer tid över (värdefull läsning):
+    - Det går att ha limits på minne en container kan ta, läs om det [här](https://phoenixnap.com/kb/docker-memory-and-cpu-limit). Det är användbart om en container skulle "skena".
+    - Rotera loggar kan du läsa om [här](https://medium.com/@Quigley_Ja/rotating-docker-logs-keeping-your-overlay-folder-small-40cfa2155412). Värdefullt när man kör i produktion att rotera loggar.
+    - Läs på om ulimit, dvs. antalet [file descriptors](https://stackoverflow.com/questions/5256599/what-are-file-descriptors-explained-in-simple-terms) och hur man kan limitera dessa [i docker](https://stackoverflow.com/questions/24318543/how-to-set-ulimit-file-descriptor-on-docker-container-the-image-tag-is-phusion)
+
 ## LAB 2
 
 [docker-compose cheat sheet](https://devhints.io/docker-compose)
@@ -118,3 +123,5 @@ Ledning för de vanligaste docker-kommandona finns här: [Docker cheat sheet](ht
 7. Skapa en volym och mounta _"/var/lib/postgresql/data"_ för att spara postgres data. Testa att det funkar genom att köra om 1 och 2 i steg 5.
 
 8. Skapa nu ett separat bride-nätverk mellan appen och databasen. [Ett exempel finns här](https://linuxhint.com/docker_compose_bridge_networking/)
+
+9. Kolla på LAB1 punkt 16.

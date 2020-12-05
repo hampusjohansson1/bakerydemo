@@ -1,5 +1,4 @@
-Wagtail demo project
-=======================
+# Wagtail demo project
 
 This is a demonstration project for the amazing [Wagtail CMS](https://github.com/wagtail/wagtail).
 
@@ -11,227 +10,97 @@ Note we do _not_ recommend using this project to start your own site - the demo 
 
 This demo is aimed primarily at developers wanting to learn more about the internals of Wagtail, and assumes you'll be reading its source code. After browsing the features, pay special attention to code we've used for:
 
--   Dividing a project up into multiple apps
--   Custom content models and "contexts" in the "breads" and "locations" apps
--   A typical weblog in the "blog" app
--   Example of using a "base" app to contain misc additional functionality (e.g. Contact Form, About, etc.)
--   "StandardPage" model using mixins borrowed from other apps
--   Example of customizing the Wagtail Admin via _wagtail_hooks_
--   Example of using the Wagtail "snippets" system to represent bread categories, countries and ingredients
--   Example of a custom "Galleries" feature that pulls in images used in other content types in the system
--   Example of creating ManyToMany relationships via the Ingredients feature on BreadPage
--   Lots more
+- Dividing a project up into multiple apps
+- Custom content models and "contexts" in the "breads" and "locations" apps
+- A typical weblog in the "blog" app
+- Example of using a "base" app to contain misc additional functionality (e.g. Contact Form, About, etc.)
+- "StandardPage" model using mixins borrowed from other apps
+- Example of customizing the Wagtail Admin via _wagtail_hooks_
+- Example of using the Wagtail "snippets" system to represent bread categories, countries and ingredients
+- Example of a custom "Galleries" feature that pulls in images used in other content types in the system
+- Example of creating ManyToMany relationships via the Ingredients feature on BreadPage
+- Lots more
 
-**Document contents**
+## LAB 1
 
-- [Installation](#installation)
-- [Next steps](#next-steps)
-- [Contributing](#contributing)
-- [Other notes](#other-notes)
+Välkommen till Wagtail - ett CMS-system för Python. Till att börja med ska vi få igång Wagtail i en docker container.
 
-# Installation
+Ledning för de vanligaste docker-kommandona finns här: [Docker cheat sheet](https://www.docker.com/sites/default/files/d8/2019-09/docker-cheat-sheet.pdf)
 
-- [Vagrant](#setup-with-vagrant)
-- [Docker](#setup-with-docker)
-- [Virtualenv](#setup-with-virtualenv)
-- [Heroku](#deploy-to-heroku)
+### Övningar
 
-If you're new to Python and/or Django, we suggest you run this project on a Virtual Machine using Vagrant or Docker (whichever you're most comfortable with). Both Vagrant and Docker will help resolve common software dependency issues. Developers more familiar with
-virtualenv and traditional Django app setup instructions should skip to [Setup with virtualenv](#setup-with-virtualenv).
+1. Öppna terminalen och gå till root i projektet (alt. använd en IDE-terminal)
 
-Setup with Vagrant
-------------------
+2. Bygg en **image** av Wagtail, med lämplig tag (-t). Det finns en färdiggjord Dockerfile som specificer hur Wagtail ska byggas.
+   
+    - Hint: "." markerar det directory du står i.
 
-#### Dependencies
-* [Vagrant](https://www.vagrantup.com/)
-* [Virtualbox](https://www.virtualbox.org/)
+3. Vilka images har du nu på din dator?
+   
+4. Vilken image utgick Wagtail från tror du?
+   
+5. Testa starta en **container** med:
+    
+    ```docker run {yourimage}```
 
-#### Installation
-Once you've installed the necessary dependencies run the following commands:
+6. Vilden adress lyssnar Wagtail på och du den och kommer du åt den adressen? Varför inte?
+   
+7. Starta nu en ny container med:
 
-```bash
-git clone https://github.com/wagtail/bakerydemo.git
-cd bakerydemo
-vagrant up
-vagrant ssh
-# then, within the SSH session:
-./manage.py runserver 0.0.0.0:8000
-```
+   -  *port forwarding* för att göra containern tillgänglig.
+   - environment-variablen (-e) *DJANGO_SECRET_KEY='test'.
+   - I *detached* state (-d). Detta betyder att docker run inte "attachar" till terminalen.
 
-The demo site will now be accessible at [http://localhost:8000/](http://localhost:8000/) and the Wagtail admin
-interface at [http://localhost:8000/admin/](http://localhost:8000/admin/).
+8. Kolla nu upp ID för containern du precis startade
+9. Kan du också hitta containern du stoppade? 
 
-Log into the admin with the credentials ``admin / changeme``.
+    Reflektera någon sekund över att du byggt två containers från samma image.
 
-Use `Ctrl+c` to stop the local server. To stop the Vagrant environment, run `exit` then `vagrant halt`.
+10. Gå till hemsidan, den har förhoppningsvis startat (Yay!), med ser inte mycket ut för världen. Testa att logga in via */admin*. Det verkar inte som vi skapat en superuser va?
 
-Setup with Docker
------------------
+11. För att skapa en användare måste du köra:
 
-#### Dependencies
-* [Docker](https://docs.docker.com/engine/installation/)
-* [Docker Compose](https://docs.docker.com/compose/install/)
+    ```/venv/bin/python manage.py createsuperuser```
 
-### Installation
-Run the following commands:
+    **inuti** containern. STÄNG INTE SHELL-SESSIONEN NÄR DU ÄR FÄRDIG.
 
-```bash
-git clone https://github.com/wagtail/bakerydemo.git
-cd bakerydemo
-docker-compose up --build -d
-docker-compose run app /venv/bin/python manage.py load_initial_data
-docker-compose up
-```
+    - Hint: Du står i */code* när du kommer in i containern.
 
-The demo site will now be accessible at [http://localhost:8000/](http://localhost:8000/) and the Wagtail admin
-interface at [http://localhost:8000/admin/](http://localhost:8000/admin/).
+12. Testa nu att logga in. Kan du lista ut vad som blir fel? 
 
-Log into the admin with the credentials ``admin / changeme``.
+    - Hint: Wagtail använder en sqlite databas.
+    - Hint: Går det att få ut containerns log?
 
-**Important:** This `docker-compose.yml` is configured for local testing only, and is _not_ intended for production use.
+13. Fixa felet för att kunna logga in
 
-### Debugging
-To tail the logs from the Docker containers in realtime, run:
+    - Hint: Även directory permission för /code behövs ändras.
+    - Hint: chmod 777 (det är inte en säkerhetslab...) is your friend.
+  
+14. Testa nu att logga in!
 
-```bash
-docker-compose logs -f
-```
+15. Har ni ännu mer tid testa att:
 
-Setup with Virtualenv
----------------------
-You can run the Wagtail demo locally without setting up Vagrant or Docker and simply use Virtualenv, which is the [recommended installation approach](https://docs.djangoproject.com/en/1.10/topics/install/#install-the-django-code) for Django itself.
+    - På valfritt sätt mounta containerns /code/db.sqllite (-v)
+    - Hjälp dina kollegor
 
-#### Dependencies
-* Python 3.6, 3.7 or 3.8
-* [Virtualenv](https://virtualenv.pypa.io/en/stable/installation/)
-* [VirtualenvWrapper](https://virtualenvwrapper.readthedocs.io/en/latest/install.html) (optional)
+## LAB 2
 
-### Installation
+[docker-compose cheat sheet](https://devhints.io/docker-compose)
 
-With [PIP](https://github.com/pypa/pip) and [virtualenvwrapper](https://virtualenvwrapper.readthedocs.io/en/latest/)
-installed, run:
+### Övningar
 
-    mkvirtualenv wagtailbakerydemo
-    python --version
+1. Öppna docker-compose.yml. Innehåller motsvarar ungefär docker start ... från LAB 1. ```Docker compose up``` används för att sätta upp alla services i docker-compose. Börja med att implementera så att docker-compose bygger image:n (motsvarande docker build).
 
-Confirm that this is showing a compatible version of Python 3.x. If not, and you have multiple versions of Python installed on your system, you may need to specify the appropriate version when creating the virtualenv:
+2. Wagtail fungerar också med en annan databas än sqllite. Nu vill vi använda den färdiga image:n postgres:9.6. Sätt upp postgres:9.6 som en service, kallad *"db"*. Du behöber environment-variablerna:
+   
+   - POSTGRES_DB: app_db
+   - POSTGRES_USER: {insert}
+   - POSTGRES_PASSWORD: changeme
 
-    deactivate
-    rmvirtualenv wagtailbakerydemo
-    mkvirtualenv wagtailbakerydemo --python=python3.6
-    python --version
+   samt:
 
-Now we're ready to set up the bakery demo project itself:
+   - exponera 5432
+   - lägg till *"restart: always"* också!
 
-    cd ~/dev [or your preferred dev directory]
-    git clone https://github.com/wagtail/bakerydemo.git
-    cd bakerydemo
-    pip install -r requirements/base.txt
-
-Next, we'll set up our local environment variables. We use [django-dotenv](https://github.com/jpadilla/django-dotenv)
-to help with this. It reads environment variables located in a file name `.env` in the top level directory of the project. The only variable we need to start is `DJANGO_SETTINGS_MODULE`:
-
-    $ cp bakerydemo/settings/local.py.example bakerydemo/settings/local.py
-    $ echo "DJANGO_SETTINGS_MODULE=bakerydemo.settings.local" > .env
-
-To set up your database and load initial data, run the following commands:
-
-    ./manage.py migrate
-    ./manage.py load_initial_data
-    ./manage.py runserver
-
-Log into the admin with the credentials ``admin / changeme``.
-
-Deploy to Heroku
-----------------
-
-If you don't want to test locally you can deploy a demo site to a publicly accessible server with [Heroku's](https://heroku.com)
-one-click deployment solution to their free 'Hobby' tier:
-
-[![Deploy](https://www.herokucdn.com/deploy/button.svg)](https://heroku.com/deploy?template=https://github.com/wagtail/bakerydemo)
-
-If you do not have a Heroku account, clicking the above button will walk you through the steps
-to generate one.  At this point you will be presented with a screen to configure your app. For our purposes,
-we will accept all of the defaults and click `Deploy`.  The status of the deployment will dynamically
-update in the browser. Once finished, click `View` to see the public site.
-
-Log into the admin with the credentials ``admin / changeme``.
-
-To prevent the demo site from regenerating a new Django `SECRET_KEY` each time Heroku restarts your site, you should set
-a `DJANGO_SECRET_KEY` environment variable in Heroku using the web interace or the [CLI](https://devcenter.heroku.com/articles/heroku-cli). If using the CLI, you can set a `SECRET_KEY` like so:
-
-    heroku config:set DJANGO_SECRET_KEY=changeme
-
-To learn more about Heroku, read [Deploying Python and Django Apps on Heroku](https://devcenter.heroku.com/articles/deploying-python).
-
-### Storing Wagtail Media Files on AWS S3
-
-If you have deployed the demo site to Heroku or via Docker, you may want to perform some additional setup.  Heroku uses an
-[ephemeral filesystem](https://devcenter.heroku.com/articles/dynos#ephemeral-filesystem), and Docker-based hosting
-environments typically work in the same manner.  In laymen's terms, this means that uploaded images will disappear at a
-minimum of once per day, and on each application deployment. To mitigate this, you can host your media on S3.
-
-This documentation assumes that you have an AWS account, an IAM user, and a properly configured S3 bucket. These topics
-are outside of the scope of this documentation; the following [blog post](https://wagtail.io/blog/amazon-s3-for-media-files/)
-will walk you through those steps.
-
-This demo site comes preconfigured with a production settings file that will enable S3 for uploaded media storage if
-``AWS_STORAGE_BUCKET_NAME`` is defined in the shell environment. All you need to do is set the following environment
-variables. If using Heroku, you will first need to install and configure the [Heroku CLI](https://devcenter.heroku.com/articles/heroku-cli). Then, execute the following commands to set the aforementioned environment variables:
-
-    heroku config:set AWS_STORAGE_BUCKET_NAME=changeme
-    heroku config:set AWS_ACCESS_KEY_ID=changeme
-    heroku config:set AWS_SECRET_ACCESS_KEY=changeme
-
-Do not forget to replace the `changeme` with the actual values for your AWS account. If you're using a different hosting
-environment, set the same environment variables there using the method appropriate for your environment.
-
-Once Heroku restarts your application or your Docker container is refreshed, you should have persistent media storage!
-
-Running `./manage.py load_initial_data` will copy local images to S3, but if you set up S3 after you ran it the first
-time you might need to run it again.
-
-# Next steps
-
-Hopefully after you've experimented with the demo you'll want to create your own site. To do that you'll want to run the `wagtail start` command in your environment of choice. You can find more information in the [getting started Wagtail CMS docs](http://wagtail.readthedocs.io/en/latest/getting_started/index.html).
-
-
-# Contributing
-
-If you're a Python or Django developer, fork the repo and get stuck in! If you'd like to get involved you may find our [contributing guidelines](https://github.com/wagtail/bakerydemo/blob/master/contributing.md) a useful read.
-
-### Preparing this archive for distribution
-
-If you change content or images in this repo and need to prepare a new fixture file for export, do the following on a branch:
-
-`./manage.py dumpdata --natural-foreign --indent 2 -e auth.permission -e contenttypes -e wagtailcore.GroupCollectionPermission -e wagtailimages.filter -e wagtailcore.pagerevision -e wagtailimages.rendition  -e sessions > bakerydemo/base/fixtures/bakerydemo.json`
-
-Please optimize any included images to 1200px wide with JPEG compression at 60%. Note that `media/images` is ignored in the repo by `.gitignore` but `media/original_images` is not. Wagtail's local image "renditions" are excluded in the fixture recipe above.
-
-Make a pull request to https://github.com/wagtail/bakerydemo
-
-# Other notes
-
-### Note on demo search
-
-Because we can't (easily) use ElasticSearch for this demo, we use wagtail's native DB search.
-However, native DB search can't search specific fields in our models on a generalized `Page` query.
-So for demo purposes ONLY, we hard-code the model names we want to search into `search.views`, which is
-not ideal. In production, use ElasticSearch and a simplified search query, per
-[http://docs.wagtail.io/en/v1.13.1/topics/search/searching.html](http://docs.wagtail.io/en/v1.13.1/topics/search/searching.html).
-
-### Sending email from the contact form
-
-The following setting in `base.py` and `production.py` ensures that live email is not sent by the demo contact form.
-
-`EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'`
-
-In production on your own site, you'll need to change this to:
-
-`EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'`
-
-and configure [SMTP settings](https://docs.djangoproject.com/en/1.10/topics/email/#smtp-backend) appropriate for your email provider.
-
-### Ownership of demo content
-
-All content in the demo is public domain. Textual content in this project is either sourced from Wikipedia or is lorem ipsum. All images are from either Wikimedia Commons or other copyright-free sources.
+3. Testa att den funkar med docker-compose up db
+4. 

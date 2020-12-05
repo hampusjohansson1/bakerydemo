@@ -34,4 +34,33 @@ Känner ni att det blir för svårt, så kolla då här för att få ledning.
 ### LAB 2
 
 1. None
-2. 
+2. None
+3. ```
+    services:
+        db:
+            environment:
+            POSTGRES_DB: app_db
+            POSTGRES_USER: app_user
+            POSTGRES_PASSWORD: changeme
+    ```
+4. None
+5. ```
+    services:
+        app:
+            depends_on:
+              - db
+    ```
+6. None
+7. ```
+    services:
+        db:
+            volumes:
+               - wagdb:/var/lib/postgresql/data
+    volumes:
+        wagdb:
+    ```
+8. ´´´networks:
+        my-network:
+            driver: bridge
+    ´´´
+    Specificera sedan *networks: -my-network* i din service.

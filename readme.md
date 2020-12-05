@@ -95,12 +95,29 @@ Ledning för de vanligaste docker-kommandona finns här: [Docker cheat sheet](ht
    
    - POSTGRES_DB: app_db
    - POSTGRES_USER: {insert}
-   - POSTGRES_PASSWORD: changeme
+   - POSTGRES_PASSWORD: {insert}
 
    samt:
 
-   - exponera 5432
    - lägg till *"restart: always"* också!
 
-3. Testa att den funkar med docker-compose up db
-4. 
+3. Testa att det funkar med ```docker-compose up db```
+
+4. Nu ska vi koppla ihop databasen med servern, genom environment-variablen *"DATABASE_URL"*. Använd url:en: "postgres://{username}:{password}@db/app_db". STARTA INTE APP-SERVERN ÄN. Tänk på hur vi refererar till databas-url:en från den andra containern. Varför funkar det?
+
+5. Se nu till att databasen startar före appen. [Läs depends on i docs](https://docs.docker.com/compose/compose-file/)
+   
+   - Hint: Använd docker-entrypoint-compose.sh i Dockerfile istället. Varför?
+
+6. Kör nu
+
+   1. ```docker-compose run app /venv/bin/python manage.py load_initial_data``` för att ladda startdata
+   2. ```docker-compose up``` för att köra igång appen.
+
+   - Du kan logga in i admin med *admin / changeme*
+
+    Vad händer med data när vi stänger av appen?
+
+7. Skapa en volym och mounta *"/var/lib/postgresql/data"* för att spara postgres data. Testa att det funkar genom att köra om 1 och 2 i steg 5.
+
+8. Skapa nu ett separat bride-nätverk mellan appen och databasen. [Ett exempel finns här](https://linuxhint.com/docker_compose_bridge_networking/)

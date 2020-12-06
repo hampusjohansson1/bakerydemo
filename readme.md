@@ -42,12 +42,12 @@ Det finns även extra ledning i filen [guidance.md](guidance.md) om du känner a
 
    `docker run {yourimage}`
 
-6. Vilden adress lyssnar Wagtail på och kan du nå Wagtail på den adressen? Varför / varför inte?
-7. Starta nu en ny container med:
+6. Vilden adress lyssnar Wagtail på och kan du nå Wagtail på den adressen? Varför / varför inte?. 
+7. Stoppa containern (control C) alt. docker container stop. Starta en ny Wagtail-container med:
 
    - Lämplig _port forwarding_ 
    - environment-variablen (-e) \*DJANGO_SECRET_KEY='test'.
-   - I _detached_ state (-d). Detta betyder att docker run inte "attachar" till terminalen.
+   - I _detached_ state (-d). Detta betyder att docker run inte "attachar" t.ex. STDOUT till terminalen.
 
 8. Kolla nu upp ID för containern du precis startade.
 9. Kan du också hitta containern du stoppade?
@@ -60,21 +60,22 @@ Det finns även extra ledning i filen [guidance.md](guidance.md) om du känner a
 
     `/venv/bin/python manage.py createsuperuser`
 
-    **inuti** containern. STÄNG INTE SHELL-SESSIONEN NÄR DU ÄR FÄRDIG.
+    **inuti** containern. Fördelaktligen startar du en till shell-session där du gör detta. STÄNG INTE SHELL-SESSIONEN NÄR DU ÄR FÄRDIG.
 
-    - Hint: Du står i _/code_ när du kommer in i containern.
+    - Hint: Du står i _/code_ när du kommer in i containern. Vad finns där?
 
 12. Testa nu att logga in med användaren du startade. Fungerar det? Om inte, kan du lista ut vad som blir fel?
 
     - Hint: Wagtail använder en sqlite databas.
     - Hint: Går det att få ut containerns log?
 
-13. Fixa felet för att kunna logga in
+13. Fixa felet för att kunna logga in.
 
     - Hint: Även directory permission för /code behövs ändras.
     - Hint: chmod 777 (det är inte en säkerhetslab...) is your friend.
+    - Note: Tänk också på, när du står i root ("/"), hur ser filstrukturen ut.
 
-14. Testa nu att logga in med din användare!
+14. Testa nu att logga in med din användare
 
 15. Har ni ännu mer tid testa att:
 
@@ -111,12 +112,13 @@ Det finns även extra ledning i filen [guidance.md](guidance.md) om du känner a
 5. Se nu till att databasen startar före appen. [Läs depends on i docs](https://docs.docker.com/compose/compose-file/)
 
    - Hint: Använd docker-entrypoint-compose.sh i Dockerfile istället. Varför?
-   - Hint: Funkar det inte, testa att köra `docker compose build`
+   - Hint: Funkar det inte, testa att köra `docker compose build app`
 
-6. Kör nu
-
-   1. `docker-compose run app /venv/bin/python manage.py load_initial_data` för att ladda startdata.
-   2. `docker-compose up` för att köra igång både databasen och Wagtail.
+6. Kör nu:
+   
+   1. `docker-compose up --build -d` 
+   2. `docker-compose run app /venv/bin/python manage.py load_initial_data` för att ladda startdata.
+   3. `docker-compose up` för att köra igång både databasen och Wagtail.
 
    - Du kan **logga in** i admin med _admin / changeme_
 

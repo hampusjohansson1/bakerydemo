@@ -23,15 +23,16 @@ This demo is aimed primarily at developers wanting to learn more about the inter
 
 ## LAB 1
 
-Välkommen till Wagtail - ett CMS-system för Python. Till att börja med ska vi få igång Wagtail i en docker container.
+Välkommen till Wagtail - ett CMS-system för Python. Dessa labbar kommer utgå från ett demo av Wagtail, bakerydemo, som hanterar innehåll för ett bageri.
 
-Ledning för de vanligaste docker-kommandona finns här: [Docker cheat sheet](https://www.docker.com/sites/default/files/d8/2019-09/docker-cheat-sheet.pdf)
+Ledning för de vanligaste docker-kommandona finns här: [Docker cheat sheet](https://www.docker.com/sites/default/files/d8/2019-09/docker-cheat-sheet.pdf).
+Det finns även extra ledning i filen [guidance.md](guidance.md) om du känner att du kör fast, dvs. det finns i princip två svårighetsgrader.
 
 ### Övningar
 
-1. Öppna terminalen och gå till root i projektet (alt. använd en IDE-terminal)
+1. Öppna valfri terminal och gå till root i projektet.
 
-2. Bygg en **image** av Wagtail, med lämplig tag (-t). Det finns en färdiggjord Dockerfile som specificer hur Wagtail ska byggas.
+2. Bygg en **image** av Wagtail, med lämplig tag (-t). Det finns redan en färdiggjord Dockerfile som specificer hur Wagtail ska byggas, så det behöber ni inte tänka på.
 
    - Hint: "." markerar det directory du står i.
 
@@ -41,19 +42,19 @@ Ledning för de vanligaste docker-kommandona finns här: [Docker cheat sheet](ht
 
    `docker run {yourimage}`
 
-6. Vilden adress lyssnar Wagtail på och du den och kommer du åt den adressen? Varför inte?
+6. Vilden adress lyssnar Wagtail på och kan du nå Wagtail på den adressen? Varför / varför inte?
 7. Starta nu en ny container med:
 
-   - _port forwarding_ för att göra containern tillgänglig.
+   - Lämplig _port forwarding_ 
    - environment-variablen (-e) \*DJANGO_SECRET_KEY='test'.
    - I _detached_ state (-d). Detta betyder att docker run inte "attachar" till terminalen.
 
-8. Kolla nu upp ID för containern du precis startade
+8. Kolla nu upp ID för containern du precis startade.
 9. Kan du också hitta containern du stoppade?
 
    Reflektera någon sekund över att du byggt två containers från samma image.
 
-10. Gå till hemsidan, den har förhoppningsvis startat (Yay!), med ser inte mycket ut för världen. Testa att logga in via _/admin_. Det verkar inte som vi skapat en superuser va?
+10. Gå till hemsidan, den har förhoppningsvis startat (Yay!), med ser inte mycket ut för världen. Gå till _/admin_.
 
 11. För att skapa en användare måste du köra:
 
@@ -63,7 +64,7 @@ Ledning för de vanligaste docker-kommandona finns här: [Docker cheat sheet](ht
 
     - Hint: Du står i _/code_ när du kommer in i containern.
 
-12. Testa nu att logga in. Kan du lista ut vad som blir fel?
+12. Testa nu att logga in med användaren du startade. Fungerar det? Om inte, kan du lista ut vad som blir fel?
 
     - Hint: Wagtail använder en sqlite databas.
     - Hint: Går det att få ut containerns log?
@@ -73,7 +74,7 @@ Ledning för de vanligaste docker-kommandona finns här: [Docker cheat sheet](ht
     - Hint: Även directory permission för /code behövs ändras.
     - Hint: chmod 777 (det är inte en säkerhetslab...) is your friend.
 
-14. Testa nu att logga in!
+14. Testa nu att logga in med din användare!
 
 15. Har ni ännu mer tid testa att:
 
@@ -93,7 +94,7 @@ Ledning för de vanligaste docker-kommandona finns här: [Docker cheat sheet](ht
 
 1. Öppna docker-compose.yml. Innehåller motsvarar ungefär docker start ... från LAB 1. `Docker compose up` används för att sätta upp alla services i docker-compose. Börja med att implementera så att docker-compose bygger image:n (motsvarande docker build).
 
-2. Wagtail fungerar också med en annan databas än sqllite. Nu vill vi använda den färdiga image:n postgres:9.6. Sätt upp postgres:9.6 som en service, kallad _"db"_. Du behöber environment-variablerna:
+2. Wagtail fungerar också med en annan databas än sqllite. Nu vill vi använda den färdiga image:n postgres:9.6. Sätt upp postgres:9.6 som en service, med namnet _"db"_. Du behöver också environment-variablerna:
 
    - POSTGRES_DB: app_db
    - POSTGRES_USER: {insert}
@@ -110,17 +111,18 @@ Ledning för de vanligaste docker-kommandona finns här: [Docker cheat sheet](ht
 5. Se nu till att databasen startar före appen. [Läs depends on i docs](https://docs.docker.com/compose/compose-file/)
 
    - Hint: Använd docker-entrypoint-compose.sh i Dockerfile istället. Varför?
+   - Hint: Funkar det inte, testa att köra `docker compose build`
 
 6. Kör nu
 
-   1. `docker-compose run app /venv/bin/python manage.py load_initial_data` för att ladda startdata
-   2. `docker-compose up` för att köra igång appen.
+   1. `docker-compose run app /venv/bin/python manage.py load_initial_data` för att ladda startdata.
+   2. `docker-compose up` för att köra igång både databasen och Wagtail.
 
-   - Du kan logga in i admin med _admin / changeme_
+   - Du kan **logga in** i admin med _admin / changeme_
 
    Vad händer med data när vi stänger av appen?
 
-7. Skapa en volym och mounta _"/var/lib/postgresql/data"_ för att spara postgres data. Testa att det funkar genom att köra om 1 och 2 i steg 5.
+7. Skapa en volym och mounta _"/var/lib/postgresql/data"_ för att spara postgres data. Testa att det funkar genom att köra om 1 och 2 i steg 6.
 
 8. Skapa nu ett separat bride-nätverk mellan appen och databasen. [Ett exempel finns här](https://linuxhint.com/docker_compose_bridge_networking/)
 

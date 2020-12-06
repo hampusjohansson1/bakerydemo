@@ -28,6 +28,8 @@ Välkommen till Wagtail - ett CMS-system för Python. Dessa labbar kommer utgå 
 Ledning för de vanligaste docker-kommandona finns här: [Docker cheat sheet](https://www.docker.com/sites/default/files/d8/2019-09/docker-cheat-sheet.pdf).
 Det finns även extra ledning i filen [guidance.md](guidance.md) om du känner att du kör fast, dvs. det finns i princip två svårighetsgrader.
 
+**Dra ner senaste versionen av detta repo innan du börjar**
+
 ### Övningar
 
 1. Öppna valfri terminal och gå till root i projektet.

@@ -23,24 +23,24 @@ This demo is aimed primarily at developers wanting to learn more about the inter
 
 ## LAB 1
 
-Välkommen till Wagtail - ett CMS-system för Python. Dessa labbar kommer utgå från ett demo av Wagtail, bakerydemo, som hanterar innehåll för ett bageri.
+Välkommen till Wagtail - ett CMS-system för Python. Dessa labbar kommer utgå från ett demo av Wagtail, *bakerydemo*, som hanterar innehåll för ett bageri.
 
-Ledning för de vanligaste docker-kommandona finns här: [Docker cheat sheet](https://www.docker.com/sites/default/files/d8/2019-09/docker-cheat-sheet.pdf).
-Det finns även extra ledning i filen [guidance.md](guidance.md) om du känner att du kör fast, dvs. det finns i princip två svårighetsgrader.
+- Ledning för de vanligaste docker-kommandona finns här: [Docker cheat sheet](https://www.docker.com/sites/default/files/d8/2019-09/docker-cheat-sheet.pdf).
+- Det finns även extra ledning/svar i filen [guidance.md](guidance.md) om du känner att du kör fast eller att någon övning blir för svår.
 
 **Dra ner senaste versionen av detta repo innan du börjar**
 
 ### Övningar
 
-1. Öppna valfri terminal och gå till root i projektet.
+1. Öppna terminalen och gå till root i detta projekt.
 
-2. Bygg en **image** av Wagtail, med lämplig tag (-t). Det finns redan en färdiggjord Dockerfile som specificer hur Wagtail ska byggas, så det behöber ni inte tänka på.
+2. Bygg en **image** av Wagtail, med lämplig tag (-t). Det finns redan en färdiggjord Dockerfile som specificer hur imagen ska byggas, så det behöver ni inte tänka på.
 
    - Hint: "." markerar det directory du står i.
 
-3. Vilka images har du nu på din dator?
+3. Vilka images finns nu på din dator?
 4. Vilken image utgick Wagtail från tror du?
-5. Testa starta en **container** med:
+5. Testa starta en **container** från din image med:
 
    `docker run {yourimage}`
 
@@ -95,7 +95,7 @@ Det finns även extra ledning i filen [guidance.md](guidance.md) om du känner a
 
 ### Övningar
 
-1. Öppna docker-compose.yml. Innehåller motsvarar ungefär docker start ... från LAB 1. `Docker compose up` används för att sätta upp alla services i docker-compose. Börja med att implementera så att docker-compose bygger image:n (motsvarande docker build).
+1. Öppna *docker-compose.yml*. Innehåller motsvarar ungefär docker start ... från LAB 1. `Docker compose up` används för att sätta upp alla services i docker-compose. Börja med att implementera så att docker-compose bygger image:n (motsvarande docker build).
 
 2. Wagtail fungerar också med en annan databas än sqllite. Nu vill vi använda den färdiga image:n postgres:9.6. Sätt upp postgres:9.6 som en service, med namnet _"db"_. Du behöver också environment-variablerna:
 
